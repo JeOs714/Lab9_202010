@@ -31,11 +31,12 @@ def newDijkstra(graph, s):
         v = minpq.delMin(pq)
         if not g.containsVertex(graph,v):
             raise Exception("Vertex ["+v+"] is not in the graph")
-        adjs = g.adjacentEdges(search['graph'],v)
-        adjs_iter = it.newIterator (adjs)
-        while (it.hasNext(adjs_iter)):
-            w = it.next (adjs_iter)
-            relax(search, w)
+        else:
+            adjs = g.adjacentEdges(search['graph'],v)
+            adjs_iter = it.newIterator (adjs)
+            while (it.hasNext(adjs_iter)):
+                w = it.next (adjs_iter)
+                relax(search, w)
 
 
         # obtener los enlaces adjacentes de v
