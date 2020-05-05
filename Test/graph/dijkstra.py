@@ -33,7 +33,7 @@ def newDijkstra(graph, s):
             raise Exception("Vertex ["+v+"] is not in the graph")
         else:
             adjs = g.adjacentEdges(search['graph'],v)
-            adjs_iter = it.newIterator (adjs)
+            adjs_iter = it.newIterator (adjs) 
             while (it.hasNext(adjs_iter)):
                 w = it.next (adjs_iter)
                 relax(search, w)

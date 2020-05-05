@@ -76,16 +76,16 @@ def getShortestPath (catalog, source, dst):
     """
     print("vertices: ",source,", ",dst)
 
-    dijkstra= dj.newDijkstra(catalog, source)
+    dijkstra= dj.newDijkstra(catalog['librariesGraph'], source)
+
     Path= dj.pathTo(dijkstra, dst)
 
-    print(Path)
 
 
     # ejecutar Dijkstra desde source
     # obtener el camino hasta dst
     # retornar el camino
-    return None
+    return Path
     
 # Funciones de comparacion
 
