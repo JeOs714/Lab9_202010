@@ -65,6 +65,33 @@ def loadLibraries (catalog, sep=','):
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución carga de grafo de bibliotecas:",t1_stop-t1_start," segundos")   
 
+def loadFlights (catalog, sep=';'):
+    """
+    Carga los vuelos del archivo.
+    """
+    t1 = process_time() #tiempo inicial
+    flightsfile = cf.data_dir + 'Flights/flights_nodes.csv'
+    dialect = csv.excel()
+    dialect.delimiter=sep
+    with open(flightsfile, encoding="utf-8-sig") as csvfile:
+        spamreader = csv.DictReader(csvfile, dialect=dialect)
+        for row in spamreader:
+            addFlightNode(catalog, row)
+    t2 = process_time() #tiempo final para vértices
+    print("Tiempo de ejecución carga de vértices en el grafo de vuelos:",t2-t1," segundos") 
+
+    t3 = process_time() #tiempo inicial para arcos
+    flightsfile = cf.data_dir + 'Flights/flights_edges.csv'
+    dialect = csv.excel()
+    dialect.delimiter=sep
+    with open(flightsfile, encoding="utf-8-sig") as csvfile:
+        spamreader = csv.DictReader(csvfile, dialect=dialect)
+        for row in spamreader:
+            addFlightEdge(catalog, row)
+    t4 = process_time() #tiempo final para carga de vértices y arcos
+    print("Tiempo de ejecución carga de arcos en el grafo de vuelos:",t4-t3," segundos")
+
+    print("Tiempo de ejecución total para carga del grafo de vuelos:",t4-t1," segundos")
 
 
 def initCatalog ():
@@ -80,7 +107,8 @@ def loadData (catalog):
     """
     Carga los datos de los archivos en la estructura de datos
     """
-    loadLibraries(catalog)    
+    #loadLibraries(catalog)
+    loadFlights(catalog)
 
 # Funciones llamadas desde la vista y enviadas al modelo
 
@@ -102,3 +130,8 @@ def getShortestPath(catalog, vertices):
     print("Tiempo de ejecución de dijkstra: ",t1_stop-t1_start," segundos")
     return path
 
+def addFlightNode(catalog, row):
+    return model.addFlightNode(catalog, row)
+
+def addFlightEdge (catalog, row):
+    return model.addFlightEdge(catalog, row)

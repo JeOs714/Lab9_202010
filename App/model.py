@@ -27,7 +27,7 @@ from ADT import map as map
 from ADT import list as lt
 from DataStructures import listiterator as it
 from datetime import datetime
-from Test.graph import dijkstra as dj
+from DataStructures import dijkstra as dj
 """
 Se define la estructura de un catálogo de libros.
 El catálogo tendrá tres listas, una para libros, otra para autores 
@@ -41,9 +41,12 @@ def newCatalog():
     Inicializa el catálogo y retorna el catalogo inicializado.
     """
     libgraph = g.newGraph(7235,compareByKey,directed=True)
-    catalog = {'librariesGraph':libgraph}    
+    catalog = {'librariesGraph':libgraph}
+    #rgraph = g.newGraph(5500,compareByKey)
+    fgraph = g.newGraph(111353,compareByKey)
+    #catalog['reviewGraph'] = rgraph
+    catalog['flightGraph'] = fgraph
     return catalog
-
 
 def addLibraryNode (catalog, row):
     """
@@ -60,6 +63,18 @@ def addLibraryEdge  (catalog, row):
     """
     g.addEdge (catalog['librariesGraph'], row['ID_src'], row['ID_dst'], float(row['dist']))
 
+def addFlightNode(catalog, row):
+    """
+    Adiciona un nodo para almacenar un vuelo. 
+    """
+    if not g.containsVertex(catalog['flightGraph'], row['VERTEX']):
+        g.insertVertex (catalog['flightGraph'], row['VERTEX'])
+
+def addFlightEdge (catalog, row):
+    """
+    Adiciona un enlace para conectar dos vuelos
+    """
+    g.addEdge (catalog['flightGraph'], row['SOURCE'], row['DEST'], int(row['DISTANCE']))
 
 def countNodesEdges (catalog):
     """
@@ -76,12 +91,9 @@ def getShortestPath (catalog, source, dst):
     """
     print("vertices: ",source,", ",dst)
 
-    dijkstra= dj.newDijkstra(catalog['librariesGraph'], source)
+    dijkstra= dj.newDijkstra(catalog['flightGraph'], source)
 
     Path= dj.pathTo(dijkstra, dst)
-
-
-
     # ejecutar Dijkstra desde source
     # obtener el camino hasta dst
     # retornar el camino

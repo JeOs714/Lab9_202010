@@ -77,14 +77,18 @@ def main():
             print("El grafo tiene: ", verticesNum," nodos y", edgesNum," enlaces")
         elif int(inputs[0])==3:
             vertices =input("Ingrese el vertice origen y destino\n")
-            path = controller.getShortestPath(catalog,vertices)
-            print("El camino de menor costo entre los vertices es:")
-            totalDist = 0
-            while not stk.isEmpty (path): 
-                step = stk.pop(path)
-                totalDist += step['weight']
-                print (step['vertexA'] + "-->" + step['vertexB'] + " costo: " + str(step['weight']))
-            print ("Total: " + str (totalDist))
+            try:
+                path = controller.getShortestPath(catalog,vertices)
+                print("El camino de menor costo entre los vertices es:")
+                totalDist = 0
+                while not stk.isEmpty (path): 
+                    step = stk.pop(path)
+                    totalDist += step['weight']
+                    print (step['vertexA'] + "-->" + step['vertexB'] + " costo: " + str(step['weight']))
+                    print("Total: " + str (totalDist))
+            except:
+                print("No existe un camino entre los dos vértices")
+            
         else:
             sys.exit(0)
     sys.exit(0)
