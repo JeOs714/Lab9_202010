@@ -147,8 +147,6 @@ def containsVertex (graph, vertex):
         return alt.containsVertex (graph, vertex)
 
 
-
-
 def adjacents (graph, vertex ):
     """
     Retorna una lista con todos los vertices adyacentes al vertice vertex

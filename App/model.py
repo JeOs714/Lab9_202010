@@ -74,7 +74,11 @@ def addFlightEdge (catalog, row):
     """
     Adiciona un enlace para conectar dos vuelos
     """
-    g.addEdge (catalog['flightGraph'], row['SOURCE'], row['DEST'], int(row['DISTANCE']))
+    if row['AIR_TIME'] != "" :
+        air_time = float(row['AIR_TIME'])
+    else:
+        air_time = 0
+    g.addEdge (catalog['flightGraph'], row['SOURCE'], row['DEST'], air_time)
 
 def countNodesEdges (catalog):
     """
@@ -104,3 +108,33 @@ def getShortestPath (catalog, source, dst):
 def compareByKey (key, element):
     return  (key == element['key'] )  
 
+def ComponentesConectados (grafo):
+    dicc_vertices = {}
+    contador_componentes = 1
+    vertices = g.vertices(grafo)
+    if len(vertices) == 0:
+        return 0
+    else:
+        iterator = it.newIterator(vertices)
+        vertice = it.next(iterator)
+        dicc_vertices = contar_conectados(grafo, dicc_vertices, vertice)
+        while  it.hasNext(iterator):
+            vertice_siguiente = it.next(iterator)
+            esta_visitado = dicc_vertices.get(vertice_siguiente)
+            if esta_visitado != "visited":
+                dicc_vertices[vertice_siguiente] = "visited"
+                contador_componentes += 1
+                dicc_vertices = contar_conectados(grafo, dicc_vertices, vertice_siguiente)
+        return contador_componentes
+        
+def contar_conectados(grafo, dicc_vertices, vertice):
+    adjacentes = g.adjacents(grafo, vertice)
+    if adjacentes != None:
+        iterator2 = it.newIterator(adjacentes)
+        while  it.hasNext(iterator2):
+            vertice_adj = it.next(iterator2)
+            esta_visitado = dicc_vertices.get(vertice_adj)
+            if esta_visitado != "visited":
+                dicc_vertices[vertice_adj] = "visited"
+                contar_conectados(grafo, dicc_vertices, vertice_adj)
+    return dicc_vertices

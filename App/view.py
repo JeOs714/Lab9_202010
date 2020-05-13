@@ -43,7 +43,8 @@ def printMenu():
     print("Bienvenido al Laboratorio 9")
     print("1- Cargar información")
     print("2- Contar nodos y enlances cargados ")
-    print("3- Obtener el camino de menor costo entre dos vértices usando Dijkstra (origen destino)")
+    print("3- Contar componentes conectados")
+    print("4- Obtener el camino de menor costo entre dos vértices usando Dijkstra (origen destino)")
     print("0- Salir")
 
 
@@ -65,33 +66,53 @@ def loadData (catalog):
 Menu principal 
 """ 
 def main():
+    datos_cargados = False
     while True: 
         printMenu()
         inputs =input("Seleccione una opción para continuar\n")
-        if int(inputs[0])==1:
-            print("Cargando información de los archivos ....")
-            catalog = initCatalog ()
-            loadData (catalog)
-        elif int(inputs[0])==2:
-            verticesNum, edgesNum = controller.countNodesEdges(catalog) 
-            print("El grafo tiene: ", verticesNum," nodos y", edgesNum," enlaces")
-        elif int(inputs[0])==3:
-            vertices =input("Ingrese el vertice origen y destino\n")
-            try:
-                path = controller.getShortestPath(catalog,vertices)
-                print("El camino de menor costo entre los vertices es:")
-                totalDist = 0
-                while not stk.isEmpty (path): 
-                    step = stk.pop(path)
-                    totalDist += step['weight']
-                    print (step['vertexA'] + "-->" + step['vertexB'] + " costo: " + str(step['weight']))
-                    print("Total: " + str (totalDist))
-            except:
-                print("No existe un camino entre los dos vértices")
-            
+        if int(inputs[0])==1: # 1- Cargar información
+            if not datos_cargados:
+                print("Cargando información de los archivos ....")
+                catalog = initCatalog ()
+                loadData (catalog)
+                datos_cargados = True
+            else:
+                print("Los datos ya han sido cargados previamente.")
+        elif int(inputs[0])==2: # 2- Contar nodos y enlances cargados
+            if datos_cargados:
+                verticesNum, edgesNum = controller.countNodesEdges(catalog) 
+                print("El grafo tiene: ", verticesNum," nodos y", edgesNum," enlaces")
+            else:
+                print("No se han cargado los datos previamente. Carguelos e intente de nuevo.")
+
+        elif int(inputs[0])==3: # 3- Contar componentes conectados
+            if datos_cargados:
+                Num_comp_conectados = controller.ComponentesConectados(catalog['flightGraph'])
+                print("El grafo tiene: ", Num_comp_conectados," componentes conectados ó Clusters.")
+            else:
+                print("No se han cargado los datos previamente. Carguelos e intente de nuevo.")
+
+        elif int(inputs[0])==4: # 4- Obtener el camino de menor costo entre dos vértices usando Dijkstra (origen destino)
+            if datos_cargados:
+                vertices =input("Ingrese el vertice origen y destino\n")
+                try:
+                    path = controller.getShortestPath(catalog,vertices)
+                    print("El camino de menor costo entre los vertices es:")
+                    totalDist = 0
+                    while not stk.isEmpty (path): 
+                        step = stk.pop(path)
+                        totalDist += step['weight']
+                        print (step['vertexA'] + "-->" + step['vertexB'] + " costo: " + str(step['weight']))
+                        print("Total: " + str (totalDist))
+                except:
+                    print("No existe un camino entre los dos vértices")
+            else:
+                print("No se han cargado los datos previamente. Carguelos e intente de nuevo.")
+
         else:
             sys.exit(0)
     sys.exit(0)
 
 if __name__ == "__main__":
+    #sys.setrecursionlimit(1100)
     main()

@@ -135,3 +135,10 @@ def addFlightNode(catalog, row):
 
 def addFlightEdge (catalog, row):
     return model.addFlightEdge(catalog, row)
+
+def ComponentesConectados (grafo):
+    t1_start = process_time() #tiempo inicial
+    componentes = model.ComponentesConectados(grafo)
+    t1_stop = process_time() #tiempo final
+    print("Tiempo de ejecución de componentes conectados: ",t1_stop-t1_start," segundos")
+    return componentes
